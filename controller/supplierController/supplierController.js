@@ -268,17 +268,6 @@ sendSupplierToken(supplier,200,res)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Forgot Password
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   const supplier = await AllUser.findOne({ email: req.body.email });
@@ -354,16 +343,6 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
   sendSupplierToken(supplier, 200, res);
 });
-
-
-
-
-
-
-
-
-
-
 
 
 
