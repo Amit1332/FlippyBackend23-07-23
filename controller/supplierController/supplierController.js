@@ -14,7 +14,6 @@ const crypto  = require("crypto")
 exports.sendOtpByNumber = catchAsyncError(async(req,res,next)=> {
  optRandomvalue = Math.floor(Math.random() * 1000000);
  const phone = req.body.phone
- console.log(phone);
 
 const isExistPhone = await AllUser.findOne({phone})
 if(isExistPhone){
@@ -48,30 +47,27 @@ res.status(200).json({
  isExistPhone,
  message: `Otp sent to ${req.body.phone} successfully`,
 })  
-
 }
- 
 })
+
 
 exports.verifyNumber = catchAsyncError(async(req,res,next)=> {
   const supplier = await AllUser.findById(req.supplier.id).select("+otp_mobile")
-    const otp_mobile = req.body.otp_mobile
-    if (supplier.otp_mobile != otp_mobile || supplier.otp_mobile_expiry < Date.now() ) {
+  const otp_mobile = req.body.otp_mobile
+
+  if(supplier.otp_mobile != otp_mobile || supplier.otp_mobile_expiry < Date.now() ) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid OTP or has been Expired" });
-    }
-
+  }
     supplier.otp_mobile = null;
     supplier.otp_mobile_expiry  = null;
-
     await supplier.save();
 
 res.status(200).json({
   succes:true,
   msg:"Account Verified"
 }) 
-
 })
 
 exports.verifyEmail = catchAsyncError(async(req,res,next)=> {
@@ -100,9 +96,8 @@ msg:"Account Verified"
 
 
 exports.sendOtpByEmail = catchAsyncError(async(req,res,next)=> {
-  optRandomvalue = Math.floor(Math.random() * 1000000);
-  const email = req.body.email
-  console.log(email);
+ optRandomvalue = Math.floor(Math.random() * 1000000);
+ const email = req.body.email
  const isExistEmail = await AllUser.findOne({email})
  if(isExistEmail){
   return next(new ErrorHander("Email is Already Registered", 401))
